@@ -1,93 +1,144 @@
-⚽ Player Re-identification in Soccer Videos
-This project implements player re-identification for a 15-second 720p soccer video (15sec_input_720p.mp4), aligning with Option 2 of the assignment. The goal is to maintain consistent player IDs across frames, even when players leave and re-enter the frame (e.g., during goal events). A fine-tuned YOLOv11 model (best.pt) is used for detection, combined with an IoU- and feature-based tracking system.
-
-📌 Overview
-
-Detect players and goalkeepers using a custom YOLOv11 model.
-Assign unique IDs and maintain identity across frames.
-Handle temporary occlusion and re-entry for up to 45 frames.
-Generate an annotated output video with green bounding boxes and labels.
 
 
-🔧 Requirements
+---
 
-Python 3.8+
-opencv-python==4.12.0.88
-ultralytics==8.0.145
-numpy==1.21.6
-scipy==1.7.3
+# ⚽ Player Re-identification in Soccer Videos
 
+This project implements **player re-identification** for a 15-second 720p soccer video (`15sec_input_720p.mp4`), aligning with **Option 2** of the assignment. The objective is to maintain **consistent player IDs across video frames**, even when players **temporarily leave and re-enter** the scene (e.g., during goal events). The system uses a **fine-tuned YOLOv11 model (`best.pt`)** for detection, combined with an **IoU- and feature-based tracking algorithm** for identity preservation.
 
-⚙️ Setup Instructions
-1. Clone the Repository
+---
+
+## 📌 Overview
+
+* Detect players and goalkeepers using a custom **YOLOv11** model
+* Assign and maintain **unique player IDs** across frames
+* Handle **temporary occlusion** and player re-entry for up to **45 frames**
+* Generate an **annotated output video** with green bounding boxes and player labels
+
+---
+
+## 🔧 Requirements
+
+* Python 3.8+
+* `opencv-python==4.12.0.88`
+* `ultralytics==8.0.145`
+* `numpy==1.21.6`
+* `scipy==1.7.3`
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
 git clone https://github.com/Baskaran0402/player-reid-soccer.git
 cd player-reid-soccer
+```
 
-2. Create and Activate Virtual Environment
+### 2. Create and Activate Virtual Environment
+
+```bash
 python -m venv venv
-.\venv\Scripts\Activate.ps1  # For Windows PowerShell
+.\venv\Scripts\Activate.ps1   # For Windows PowerShell
 # or
-venv\Scripts\activate       # For Windows CMD
+venv\Scripts\activate         # For Windows CMD
+```
 
-3. Install Dependencies
+### 3. Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-4. Download Required Files
-Download the following from Google Drive folder:
+### 4. Download Required Files
 
-15sec_input_720p.mp4 – Input video
-best.pt – YOLOv11 model weights
-output_tracked.mp4 – Output result
+Download the following from the provided **Google Drive** link and place them in the **project root directory**:
 
-Place them in the project root directory.
+* `15sec_input_720p.mp4` – Input video
+* `best.pt` – YOLOv11 model weights
+* `output_tracked.mp4` – Output video (sample result)
 
-🚀 Run the Script
+---
+
+## 🚀 Running the Script
+
+```bash
 python player.py
+```
 
+### 🎯 Output
 
-Output: output_tracked.mp4
-The output video shows green bounding boxes with ID: <number> annotations for players and goalkeepers.
+* Generates `output_tracked.mp4`
+* Includes green bounding boxes with `ID:<number>` labels for both players and goalkeepers
 
+---
 
-🎞️ Output & Performance
+## 🎞️ Output & Performance
 
-Total Frames: 375
-Processing Time: ~2554 seconds on CPU (~0.15 FPS)
-Result: Green bounding boxes with consistent ID: <number> annotations
-Example Frames: Shown in report.pdf (Figures 1 and 2)
+| Metric          | Value                                                          |
+| --------------- | -------------------------------------------------------------- |
+| Total Frames    | 375                                                            |
+| Processing Time | \~2554 seconds on CPU                                          |
+| Inference Speed | \~0.15 FPS                                                     |
+| Output          | Green bounding boxes with consistent `ID:<number>` annotations |
 
+> Example annotated frames are available in `report.pdf` (see Figures 1 and 2).
 
-📁 Project Structure
+---
+
+## 📁 Project Structure
+
+```
 player-reid-soccer/
-├── player.py               # Main script for detection & tracking
-├── report.pdf              # Final report with methods & results
-├── requirements.txt        # Python dependencies
-├── README.md               # This file
-├── .gitignore              # Ignored files
-├── 15sec_input_720p.mp4    # Input video (external, via Google Drive)
-├── best.pt                 # YOLOv11 model (external, via Google Drive)
-└── output_tracked.mp4      # Annotated output video (external, via Google Drive)
+├── player.py               # Main detection and tracking script
+├── report.pdf              # Report with methodology and results
+├── requirements.txt        # Dependency list
+├── README.md               # Project documentation
+├── .gitignore              # Git ignored files
+├── 15sec_input_720p.mp4    # Input video (external)
+├── best.pt                 # YOLOv11 model weights (external)
+└── output_tracked.mp4      # Annotated result video (external)
+```
 
+---
 
-💡 Notes
+## 💡 Technical Notes
 
-Detects players (class 2) and goalkeepers (class 1) using YOLOv11.
-Uses IoU threshold = 0.3 for frame-to-frame tracking and cosine distance = 0.4 for re-identification after up to 45-frame disappearance (~3 seconds at 25 FPS).
-Performance can be improved with GPU acceleration (CUDA) or a smaller model (e.g., yolov11s.pt).
-The project is self-contained, with all dependencies listed and instructions provided for reproducibility.
+* **Classes Detected**:
 
+  * `Class 1`: Goalkeepers
+  * `Class 2`: Outfield players
+* **Tracking Parameters**:
 
-📚 Report
-Refer to report.pdf for detailed insights into:
+  * IoU threshold: **0.3**
+  * Cosine distance threshold: **0.4**
+  * Max disappearance frames: **45** (i.e., \~3 seconds at 25 FPS)
+* Performance can be significantly improved with **GPU acceleration (CUDA)** or by switching to a smaller model like `yolov11s.pt`.
 
-Model architecture
-Tracking methodology
-Challenges & future scope
-Result analysis
+---
 
+## 📚 Report
 
-👨‍💻 Author
-Baskaran SeennavasanGitHub: @Baskaran0402
+Please refer to `report.pdf` for detailed information on:
 
-📜 License
-This project is provided for academic purposes. For reuse or extension, please contact the author.
+* YOLOv11 model architecture
+* Tracking algorithm and re-identification logic
+* Experimental results
+* Challenges faced and future improvements
+
+---
+
+## 👨‍💻 Author
+
+**Baskaran Seennavasan**
+GitHub: [@Baskaran0402](https://github.com/Baskaran0402)
+
+---
+
+## 📜 License
+
+This project is provided **for academic and educational purposes**. For reuse, modification, or commercial use, please contact the author.
+
+---
+
