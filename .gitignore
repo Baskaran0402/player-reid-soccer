@@ -1,0 +1,9 @@
+# Ignore large files
+15sec_input_720p.mp4
+best.pt
+output_tracked.mp4
+
+# Python
+venv/
+__pycache__/
+*.pyc
